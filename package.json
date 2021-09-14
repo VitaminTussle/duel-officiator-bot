@@ -1,0 +1,25 @@
+{
+  "name": "prime-lab-discord-bot",
+  "version": "1.0.0",
+  "description": "A Discord bot made in conjunction with Prime Lab Nights at UARK",
+  "main": "index.ts",
+  "scripts": {
+    "start": "nodemon index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VitaminTussle/prime-lab-discord-bot.git"
+  },
+  "author": "Dustin Black",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/VitaminTussle/prime-lab-discord-bot/issues"
+  },
+  "homepage": "https://github.com/VitaminTussle/prime-lab-discord-bot#readme",
+  "dependencies": {
+    "discord.js": "^13.1.0",
+    "nodemon": "^2.0.12",
+    "ts-node": "^10.2.1"
+  }
+}
