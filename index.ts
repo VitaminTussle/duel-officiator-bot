@@ -62,7 +62,7 @@ client.on("messageCreate", m => {
         } else if(m.content.substring(6) == "<@!887475212050919496>"){
             m.reply("you'd never survive.");
         } else {
-            m.channel.send("I respect the antsiness, but keep it in your pants. " + p1Id + " and " + p2Id + " are playin' right now.");
+            m.channel.send("I respect the antsiness, but keep it in your pants. <@!" + p1Id + "> and <@!" + p2Id + "> are playin' right now.");
         }
     } else if(stage === "p1b" && isNumber(m.content) && m.author.id === p1Id){
         activeTime = new Date();
@@ -70,8 +70,10 @@ client.on("messageCreate", m => {
         p1num = b;
         while(b > 0){
             var slot = Math.floor(Math.random() * 6);
-            p1Bullets[slot] = true;
-            b--;
+            if(!p1Bullets[slot]){
+                p1Bullets[slot] = true;
+                b--;
+            }
         }
         m.channel.send("sounds good, you got yer " + parseInt(m.content) + " bullets. what about you, <@!" + p2Id + ">?");
         stage = "p2b";
@@ -81,8 +83,10 @@ client.on("messageCreate", m => {
         p2num = b;
         while(b > 0){
             var slot = Math.floor(Math.random() * 6);
-            p1Bullets[slot] = true;
-            b--;
+            if(!p2Bullets[slot]){
+                p2Bullets[slot] = true;
+                b--;
+            }
         }
         m.channel.send("aight, you got yer " + parseInt(m.content) + " bullets.");
         m.channel.send("now, <@!" + p1Id + ">, which chambers do you want to fire on? (send up to the number of bullets you chose in digits 1-6)");
@@ -110,16 +114,26 @@ client.on("messageCreate", m => {
         var bangs = "";
         var pows = "";
         for(let i = 1; i < p1Shots.length; i++){
-            bangs += "***BANG!***\n";
+            bangs += p1Shots[i] ? "***BANG!***\n" : "*whiff*\n";
         }
         for(let i = 1; i < p2Shots.length; i++){
-            pows += "***POW!***\n";
+            pows += p2Shots[i] ? "***POW!***\n" : "*whiff*\n";
         }
         m.channel.send(bangs + pows);
 
         var p1damage = 0.0;
         var p2damage = 0.0;
-        switch(p1Shots.length - 1){
+        var p1start = 0;
+        var p2start = 0;
+
+        for(let i = 0; i < p1Bullets.length; i++){
+            if(p1Bullets[i])
+                p1start++;
+            if(p2Bullets[i])
+                p2start++;
+        }
+
+        switch(p1start){
             case 1:
                 p1damage += 10.0;
                 break;
@@ -142,7 +156,7 @@ client.on("messageCreate", m => {
                 p1damage += 0.1;
                 break;
         }
-        switch(p2Shots.length - 1){
+        switch(p2start){
             case 1:
                 p2damage += 10.0;
                 break;
