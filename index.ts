@@ -39,8 +39,14 @@ client.on("messageCreate", m => {
     else if(m.content.startsWith("!duel")){
         if(m.content.substring(6) === "<@!" + m.author.id + ">"){
             m.reply("no duelin' yourself. no honor in that.");
+        } else if(m.content.substring(6).includes("887475212050919496")){
+            m.reply("you'd never survive.");
         } else if((stage === "" || p1Id === "" || new Date().getTime() > activeTime.getTime() + 60000) && hasUserIdArg(m.content)
             /*&& m.content.substring(6) != "<@!" + m.author.id + ">" && m.content.substring(6) != "<@!887475212050919496>"*/){
+            p1Bullets = [false, false, false, false, false, false];
+            p2Bullets = [false, false, false, false, false, false];
+            p1Shots = [false];
+            p2Shots = [false];
             activeTime = new Date();
             p1Id = m.author.id;
             p2Id = m.content.substring(9, m.content.length - 1);
@@ -59,9 +65,7 @@ client.on("messageCreate", m => {
                 "\n```");
         } else if(!hasUserIdArg(m.content)){
             m.reply("can't find that user, sorry bucko");
-        } else if(m.content.substring(6) == "<@!887475212050919496>"){
-            m.reply("you'd never survive.");
-        } else {
+        }  else {
             m.channel.send("I respect the antsiness, but keep it in your pants. <@!" + p1Id + "> and <@!" + p2Id + "> are playin' right now.");
         }
     } else if(stage === "p1b" && isNumber(m.content) && m.author.id === p1Id){
@@ -92,7 +96,8 @@ client.on("messageCreate", m => {
         m.channel.send("now, <@!" + p1Id + ">, which chambers do you want to fire on? (send up to the number of bullets you chose in digits 1-6)");
         stage = "p1o";
     } else if((stage === "p1b" || stage === "p2b") && (m.author.id === p1Id || m.author.id === p2Id)){
-        m.channel.send("that's not a number, try again fool.");
+        if(m.content == "cancel") stage = "";
+        else m.channel.send("that's not a number, try again fool.");
     } else if((stage === "p1o") && isChambers(m.content, m.author.id) && m.author.id === p1Id){
         activeTime = new Date();
         p1Shots = [false];
